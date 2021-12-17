@@ -2,12 +2,10 @@ import React from 'react';
 import { Acessory } from '../../components/Acessory';
 import { BackButton } from '../../components/BackButton';
 import { ImageSlider } from '../../components/ImageSlider';
-import speedSvg from '../../assets/speed.svg';
-import accelerationSvg from '../../assets/acceleration.svg';
-import forceSvg from '../../assets/force.svg';
-import gasolineSvg from '../../assets/gasoline.svg';
-import exchangeSvg from '../../assets/exchange.svg';
-import peopleSvg from '../../assets/people.svg';
+import { Button } from '../../components/Button';
+import { RootStackParamList } from '../../routes/stack.routes';
+import { StackScreenProps } from '@react-navigation/stack';
+import { getAccessoryIcon } from '../../utils/getAccessoryIcon';
 import {
   Container,
   Header,
@@ -21,55 +19,56 @@ import {
   Period,
   Price,
   About,
-  Acessories,
+  Accessories,
   Footer
 } from './styles';
-import { Button } from '../../components/Button';
-import { RootStackParamList } from '../../routes/stack.routes';
-import { StackScreenProps } from '@react-navigation/stack';
 
 type Props = StackScreenProps<RootStackParamList, 'CarDetails'>;
 
 export function CarDetails({ route, navigation }: Props) {
+  const { car } = route.params;
+  
   function handleConfirmRental() {
     navigation.navigate('Scheduling');
   }
 
+  function handleBack() {
+    navigation.goBack();
+  } 
+
   return (
     <Container>
       <Header>
-        <BackButton onPress={() => {}} />
+        <BackButton onPress={handleBack} />
       </Header>
       <CarImages>
         <ImageSlider 
-          imagesUrl={['https://production.autoforce.com/uploads/version/profile_image/3188/model_main_comprar-tiptronic_87272c1ff1.png']}
+          imagesUrl={car.photos}
         />
       </CarImages>
       <Content>
         <Details>
           <Description>
-            <Brand>Lamborghini</Brand>
-            <Name>Huracan</Name>
+            <Brand>{car.brand}</Brand>
+            <Name>{car.name}</Name>
           </Description>
           <Rent>
-            <Period>Ao dia</Period>
-            <Price>R$ 580</Price>
+            <Period>{car.rent.period}</Period>
+            <Price>R$ {car.rent.price}</Price>
           </Rent>
         </Details>
-        <Acessories>
-          <Acessory name="380Km/h" icon={speedSvg}/>
-          <Acessory name="3.2s" icon={accelerationSvg}/>
-          <Acessory name="800 HP" icon={forceSvg}/>
-          <Acessory name="Gasolina" icon={gasolineSvg}/>
-          <Acessory name="Auto" icon={exchangeSvg}/>
-          <Acessory name="2 pessoas" icon={peopleSvg}/>
-        </Acessories>
-        <About>
-          Este é automóvel desportivo. Surgiu do lendário 
-          touro de lide indultado na praça Real Maestranza 
-          de Sevilla. É um belíssimo carro para quem gosta 
-          de acelerar.
-        </About>
+        <Accessories>
+          {
+            car.accessories.map(accessory => 
+              <Acessory 
+                key={accessory.type}
+                name={accessory.name} 
+                icon={getAccessoryIcon(accessory.type)}
+              />
+            )
+          }
+        </Accessories>
+        <About>{car.about}</About>
       </Content>
       <Footer>
         <Button 

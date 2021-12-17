@@ -1,8 +1,6 @@
-import React, { useEffect } from 'react';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
+import React from 'react';
 import { RectButtonProps } from 'react-native-gesture-handler';
 import GasolineSvg from '../../assets/gasoline.svg'
-import { RootStackParamList } from '../../routes/stack.routes';
 import {
   Container,
   Details,
@@ -15,24 +13,16 @@ import {
   Type,
   CarImage
 } from './styles';
-
-interface CardData {
-  brand: string;
-  name: string;
-  rent: {
-    period: string;
-    price: number;
-  }
-  thumbnail: string;
-}
+import { CarDTO } from '../../dtos/CarDTO';
+import { getAccessoryIcon } from '../../utils/getAccessoryIcon';
 
 interface Props extends RectButtonProps {
-  data: CardData
+  data: CarDTO
 }
 
 export function Car({ data, ...rest }: Props) {
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-  useEffect(() => navigation.navigate('CarDetails'), []);
+  const MotorIcon = getAccessoryIcon(data.fuel_type);
+  
   return (
     <Container {...rest}>
       <Details>
@@ -44,7 +34,7 @@ export function Car({ data, ...rest }: Props) {
             <Price>{`R$ ${data.rent.price}`}</Price>
           </Rent>
           <Type>
-            <GasolineSvg />
+            <MotorIcon />
           </Type>
         </About>
       </Details>
