@@ -5,6 +5,8 @@ import theme from '../../styles/theme';
 
 interface ButtonProps extends RectButtonProps {
   color?: string;
+  enabled?: boolean;
+  loading?: boolean;
 }
 
 export const Container = styled(RectButton)<ButtonProps>`
@@ -13,6 +15,7 @@ export const Container = styled(RectButton)<ButtonProps>`
   justify-content: center;
   align-items: center;
   background-color: ${({ color }) => color};
+  opacity: ${({ enabled, loading }) => enabled || loading ? 1 : .5};
 `;
 
 export const Title = styled.Text`

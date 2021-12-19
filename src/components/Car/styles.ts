@@ -11,6 +11,7 @@ export const Container = styled(RectButton)`
   align-items: center;
   padding: 24px;
   margin-bottom: 16px;
+  border-radius: .1px;
 `;
 
 export const Details = styled.View``;

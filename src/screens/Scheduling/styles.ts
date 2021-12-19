@@ -54,6 +54,7 @@ export const DateValue = styled.Text<DateValueProps>`
     border-bottom-color: ${theme.colors.text}
     padding-bottom: 5px;
   `}
+  width: 100%;
 `
 export const Content = styled.ScrollView.attrs({
   contentContainerStyle: {
