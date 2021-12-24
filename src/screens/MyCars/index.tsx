@@ -23,7 +23,7 @@ import { StackScreenProps } from '@react-navigation/stack';
 import { RootStackParamList } from '../../routes/stack.routes';
 import { BackButton } from '../../components/BackButton';
 import { Car } from '../../components/Car';
-import { Load } from '../../components/Load';
+import { LoadAnimation } from '../../components/LoadAnimation';
 
 interface CarProps {
   id: string;
@@ -80,7 +80,7 @@ export function MyCars({ route, navigation }: Props) {
         </SubTitle>
       </Header>
       {
-        loading ? <Load /> :
+        loading ? <LoadAnimation /> :
         <Content>
           <Appointments>
             <AppointmentsTitle>Agendamentos feitos</AppointmentsTitle>

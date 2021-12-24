@@ -41,15 +41,3 @@ export const CarList = styled(
 })`
   width: 100%;
 `;
-
-export const MyCarsButton = styled(RectButton)`
-  width: ${RFValue(60)}px;
-  height: ${RFValue(60)}px;
-  border-radius: ${RFValue(30)}px;
-  background-color: ${({ theme }) => theme.colors.main};
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  bottom: 13px;
-  right: 22px;
-`;

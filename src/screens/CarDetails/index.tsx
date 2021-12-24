@@ -31,16 +31,18 @@ import {
   Accessories,
   Footer
 } from './styles';
-import { StatusBar } from 'react-native';
+import { StatusBar, StyleSheet } from 'react-native';
+import { getStatusBarHeight } from 'react-native-iphone-x-helper';
+import { useTheme } from 'styled-components';
 
 type Props = StackScreenProps<RootStackParamList, 'CarDetails'>;
 
 export function CarDetails({ route, navigation }: Props) {
   const { car } = route.params;
+  const theme = useTheme();
   const scrollY = useSharedValue(0);
   const scrollHandler = useAnimatedScrollHandler(event => {
     scrollY.value = event.contentOffset.y;
-    console.log(event.contentOffset.y)
   });
 
   const headerStyleAnimation = useAnimatedStyle(() => {
@@ -52,7 +54,17 @@ export function CarDetails({ route, navigation }: Props) {
         Extrapolate.CLAMP
       )
     }
-  })
+  });
+
+  const sliderCarsStyleAnimation = useAnimatedStyle(() => {
+    return {
+      opacity: interpolate(
+        scrollY.value,
+        [0, 150],
+        [1, 0]
+      )
+    }
+  });
   
   function handleConfirmRental() {
     navigation.navigate('Scheduling', { car });
@@ -70,24 +82,32 @@ export function CarDetails({ route, navigation }: Props) {
         backgroundColor='transparent'
       />
       <Animated.View
-        style={[headerStyleAnimation]}
+        style={[
+          headerStyleAnimation, 
+          styles.header,
+          { backgroundColor: theme.colors.background_secondary }
+        ]}
       >
         <Header>
           <BackButton onPress={handleBack} />
         </Header>
-        <CarImages>
-          <ImageSlider 
-            imagesUrl={car.photos}
-          />
-        </CarImages>
+        <Animated.View style={[sliderCarsStyleAnimation]}> 
+          <CarImages>
+            <ImageSlider 
+              imagesUrl={car.photos}
+            />
+          </CarImages>
+        </Animated.View>
       </Animated.View>
       <Animated.ScrollView
         contentContainerStyle={{
           padding: 24,
-          alignItems: 'center'
+          alignItems: 'center',
+          paddingTop: getStatusBarHeight() + 160
         }}
         showsVerticalScrollIndicator={false}
         onScroll={scrollHandler}
+        scrollEventThrottle={16}
       >
         <Details>
           <Description>
@@ -110,7 +130,7 @@ export function CarDetails({ route, navigation }: Props) {
             )
           }
         </Accessories>
-        <About>{car.about}{car.about}{car.about}{car.about}{car.about}</About>
+        <About>{car.about}</About>
       </Animated.ScrollView>
       <Footer>
         <Button 
@@ -121,3 +141,11 @@ export function CarDetails({ route, navigation }: Props) {
     </Container>
   );
 }
+
+const styles = StyleSheet.create({
+  header: {
+    position: 'absolute',
+    overflow: 'hidden',
+    zIndex: 1
+  }
+})

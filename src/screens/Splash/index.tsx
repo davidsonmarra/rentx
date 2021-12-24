@@ -64,7 +64,7 @@ export function Splash({ route, navigation }: Props) {
         runOnJS(startApp)();
       }
     );
-  }, [])
+  }, []);
 
   return (
     <Container>
