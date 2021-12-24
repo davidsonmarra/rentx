@@ -1,7 +1,7 @@
 import React from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
 import { RootStackParamList } from '../../routes/stack.routes';
-import { useWindowDimensions } from 'react-native';
+import { StatusBar, useWindowDimensions } from 'react-native';
 import { ConfirmButton } from '../../components/ConfirmButton';
 import LogoSvg from '../../assets/logo_background_gray.svg';
 import DoneSvg from '../../assets/done.svg';
@@ -25,6 +25,11 @@ export function SchedulingComplete({ route, navigation }: Props) {
 
   return (
     <Container>
+      <StatusBar 
+        barStyle='light-content'
+        backgroundColor='transparent'
+        translucent
+      />
       <LogoSvg width={width} />
       <Content>
         <DoneSvg 

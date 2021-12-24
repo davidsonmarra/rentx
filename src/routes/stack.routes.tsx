@@ -1,6 +1,6 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-
+import { Splash } from '../screens/Splash';
 import { Home } from '../screens/Home';
 import { CarDetails } from '../screens/CarDetails';
 import { Scheduling } from '../screens/Scheduling';
@@ -10,6 +10,7 @@ import { MyCars } from '../screens/MyCars';
 import { CarDTO } from '../dtos/CarDTO';
 
 export type RootStackParamList = {
+  Splash: undefined;
   Home: undefined;
   CarDetails: { car: CarDTO };
   Scheduling: { car: CarDTO };
@@ -24,9 +25,14 @@ export function StackRoutes() {
   return (
     <Navigator
       screenOptions={{
-        headerShown: false
+        headerShown: false,
       }}
+      initialRouteName='Splash'
     >
+      <Screen 
+        name="Splash"
+        component={Splash}
+      />
       <Screen 
         name="Home"
         component={Home}

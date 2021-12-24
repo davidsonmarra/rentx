@@ -1,4 +1,13 @@
 import React from 'react';
+import Animated, { 
+  useSharedValue, 
+  useAnimatedStyle, 
+  withTiming,
+  interpolate,
+  Extrapolate,
+  runOnJS,
+  useAnimatedScrollHandler
+} from 'react-native-reanimated';
 import { Acessory } from '../../components/Acessory';
 import { BackButton } from '../../components/BackButton';
 import { ImageSlider } from '../../components/ImageSlider';
@@ -22,11 +31,28 @@ import {
   Accessories,
   Footer
 } from './styles';
+import { StatusBar } from 'react-native';
 
 type Props = StackScreenProps<RootStackParamList, 'CarDetails'>;
 
 export function CarDetails({ route, navigation }: Props) {
   const { car } = route.params;
+  const scrollY = useSharedValue(0);
+  const scrollHandler = useAnimatedScrollHandler(event => {
+    scrollY.value = event.contentOffset.y;
+    console.log(event.contentOffset.y)
+  });
+
+  const headerStyleAnimation = useAnimatedStyle(() => {
+    return {
+      height: interpolate(
+        scrollY.value,
+        [0, 200],
+        [200, 70],
+        Extrapolate.CLAMP
+      )
+    }
+  })
   
   function handleConfirmRental() {
     navigation.navigate('Scheduling', { car });
@@ -38,15 +64,31 @@ export function CarDetails({ route, navigation }: Props) {
 
   return (
     <Container>
-      <Header>
-        <BackButton onPress={handleBack} />
-      </Header>
-      <CarImages>
-        <ImageSlider 
-          imagesUrl={car.photos}
-        />
-      </CarImages>
-      <Content>
+      <StatusBar 
+        barStyle='dark-content'
+        translucent
+        backgroundColor='transparent'
+      />
+      <Animated.View
+        style={[headerStyleAnimation]}
+      >
+        <Header>
+          <BackButton onPress={handleBack} />
+        </Header>
+        <CarImages>
+          <ImageSlider 
+            imagesUrl={car.photos}
+          />
+        </CarImages>
+      </Animated.View>
+      <Animated.ScrollView
+        contentContainerStyle={{
+          padding: 24,
+          alignItems: 'center'
+        }}
+        showsVerticalScrollIndicator={false}
+        onScroll={scrollHandler}
+      >
         <Details>
           <Description>
             <Brand>{car.brand}</Brand>
@@ -68,8 +110,8 @@ export function CarDetails({ route, navigation }: Props) {
             )
           }
         </Accessories>
-        <About>{car.about}</About>
-      </Content>
+        <About>{car.about}{car.about}{car.about}{car.about}{car.about}</About>
+      </Animated.ScrollView>
       <Footer>
         <Button 
           title='Escolher período do aluguel' 
