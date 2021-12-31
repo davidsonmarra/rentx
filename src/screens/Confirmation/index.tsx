@@ -14,13 +14,14 @@ import {
 } from './styles';
 import { RFValue } from 'react-native-responsive-fontsize';
 
-type Props = StackScreenProps<RootStackParamList, 'SchedulingComplete'>;
+type Props = StackScreenProps<RootStackParamList, 'Confirmation'>;
 
-export function SchedulingComplete({ route, navigation }: Props) {
+export function Confirmation({ route, navigation }: Props) {
+  const { title, message, nextScreenRoute } = route.params;
   const { width } = useWindowDimensions();
 
   function handleConfirm() {
-    navigation.navigate('Home');
+    navigation.navigate(nextScreenRoute);
   }
 
   return (
@@ -36,11 +37,9 @@ export function SchedulingComplete({ route, navigation }: Props) {
           width={RFValue(80)}
           height={RFValue(80)}
         />
-        <Title>Carro alugado!</Title>
+        <Title>{title}</Title>
         <Message>
-          Agora você só precisa ir {'\n'}
-          até a concessionária da RENTX {'\n'}
-          pegar o seu automóvel
+          {message}
         </Message>
       </Content>
       <Footer>
