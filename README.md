@@ -26,9 +26,13 @@
   <li>Selecionar intervalo de aluguel em um calendário dinâmico</li>
 </ul>
 
-<h3 id="funcionalidades">Resultado</h3>
+<h3 id="resultado">Resultado</h3>
 <div align="center">
-  <video autoplay loop alt="Gif do app funcionando" width="300" src="./src/assets/rentx.mp4">
+  
+
+https://user-images.githubusercontent.com/80720221/147615080-b7d37468-6b93-4e45-8b81-2d2989963915.mp4
+
+
 </div>
 
 <h3 id="executar">Como executar</h3>
