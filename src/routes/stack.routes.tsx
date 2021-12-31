@@ -8,6 +8,7 @@ import { SchedulingComplete } from '../screens/SchedulingComplete';
 import { SchedulingDetails } from '../screens/SchedulingDetails';
 import { MyCars } from '../screens/MyCars';
 import { CarDTO } from '../dtos/CarDTO';
+import { SignIn } from '../screens/SignIn';
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -31,7 +32,7 @@ export function StackRoutes() {
     >
       <Screen 
         name="Splash"
-        component={Splash}
+        component={SignIn}
       />
       <Screen 
         name="Home"
