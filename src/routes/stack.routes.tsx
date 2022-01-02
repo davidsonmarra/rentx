@@ -48,7 +48,7 @@ export function StackRoutes() {
     >
       <Screen 
         name="Splash"
-        component={SignIn}
+        component={Splash}
       />
       <Screen 
         name="SignUpFirstStep"

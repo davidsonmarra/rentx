@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useTheme } from 'styled-components';
+import { useAuth } from '../../hooks/auth';
 import { 
   StatusBar,
   KeyboardAvoidingView,
@@ -27,6 +28,7 @@ type Props = StackScreenProps<RootStackParamList, 'Splash'>;
 export function SignIn({ navigation }: Props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { signIn } = useAuth();
   const theme = useTheme();
 
   async function handleSignIn() {
@@ -39,7 +41,7 @@ export function SignIn({ navigation }: Props) {
           .required('A senha é obrigatória')
       });
       await schema.validate({email, password});
-      // fazer login
+      signIn({email, password});
     } catch(error) {
       if(error instanceof Yup.ValidationError) 
         Alert.alert('Opa', error.message)
