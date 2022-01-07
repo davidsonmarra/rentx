@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import { AuthRootTabParamList } from '../../routes/auth.tab.routes';
 import { useTheme  } from 'styled-components';
 import { FlatList, StatusBar } from 'react-native';
 import { AntDesign } from '@expo/vector-icons'
@@ -19,8 +21,6 @@ import {
   CarFooterPeriod,
   CarFooterDate
 } from './styles';
-import { StackScreenProps } from '@react-navigation/stack';
-import { RootStackParamList } from '../../routes/stack.routes';
 import { BackButton } from '../../components/BackButton';
 import { Car } from '../../components/Car';
 import { LoadAnimation } from '../../components/LoadAnimation';
@@ -33,7 +33,7 @@ interface CarProps {
   endDate: string;
 }
 
-type Props = StackScreenProps<RootStackParamList, 'MyCars'>;
+type Props = BottomTabScreenProps<AuthRootTabParamList, 'MyCars'>;
 
 export function MyCars({ route, navigation }: Props) {
   const [cars, setCars] = useState<CarProps[]>([]);

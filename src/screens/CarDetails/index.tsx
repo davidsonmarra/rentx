@@ -1,25 +1,23 @@
 import React from 'react';
+import { StackScreenProps } from '@react-navigation/stack';
+import { AuthRootStackParamList } from '../../routes/auth.stack.routes';
+import { useTheme } from 'styled-components';
 import Animated, { 
   useSharedValue, 
   useAnimatedStyle, 
-  withTiming,
   interpolate,
   Extrapolate,
-  runOnJS,
   useAnimatedScrollHandler
 } from 'react-native-reanimated';
 import { Acessory } from '../../components/Acessory';
 import { BackButton } from '../../components/BackButton';
 import { ImageSlider } from '../../components/ImageSlider';
 import { Button } from '../../components/Button';
-import { RootStackParamList } from '../../routes/stack.routes';
-import { StackScreenProps } from '@react-navigation/stack';
 import { getAccessoryIcon } from '../../utils/getAccessoryIcon';
 import {
   Container,
   Header,
   CarImages,
-  Content,
   Details,
   Description,
   Brand,
@@ -33,9 +31,8 @@ import {
 } from './styles';
 import { StatusBar, StyleSheet } from 'react-native';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
-import { useTheme } from 'styled-components';
 
-type Props = StackScreenProps<RootStackParamList, 'CarDetails'>;
+type Props = StackScreenProps<AuthRootStackParamList, 'CarDetails'>
 
 export function CarDetails({ route, navigation }: Props) {
   const { car } = route.params;

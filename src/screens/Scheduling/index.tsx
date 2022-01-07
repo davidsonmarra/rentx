@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
-import { RootStackParamList } from '../../routes/stack.routes';
+import { AuthRootStackParamList } from '../../routes/auth.stack.routes';
 import { BackButton } from '../../components/BackButton';
 import ArrowSvg from '../../assets/arrow.svg'
 import { useTheme } from 'styled-components';
@@ -25,7 +25,7 @@ import {
 } from './styles';
 import { format, parseISO } from 'date-fns';
 
-type Props = StackScreenProps<RootStackParamList, 'Scheduling'>;
+type Props = StackScreenProps<AuthRootStackParamList, 'Scheduling'>;
 
 interface RentalPeriod {
   start: number;

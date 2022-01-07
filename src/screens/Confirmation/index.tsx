@@ -1,6 +1,7 @@
 import React from 'react';
+import { CompositeScreenProps } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
-import { RootStackParamList } from '../../routes/stack.routes';
+import { AuthRootStackParamList } from '../../routes/auth.stack.routes';
 import { StatusBar, useWindowDimensions } from 'react-native';
 import { ConfirmButton } from '../../components/ConfirmButton';
 import LogoSvg from '../../assets/logo_background_gray.svg';
@@ -13,8 +14,12 @@ import {
   Footer
 } from './styles';
 import { RFValue } from 'react-native-responsive-fontsize';
+import { PublicRootStackParamList } from '../../routes/public.routes';
 
-type Props = StackScreenProps<RootStackParamList, 'Confirmation'>;
+type Props = CompositeScreenProps<
+  StackScreenProps<PublicRootStackParamList, 'Confirmation'>,
+  StackScreenProps<AuthRootStackParamList, 'Confirmation'>
+>;
 
 export function Confirmation({ route, navigation }: Props) {
   const { title, message, nextScreenRoute } = route.params;

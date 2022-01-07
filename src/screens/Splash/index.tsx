@@ -1,4 +1,6 @@
 import React, { useEffect } from 'react';
+import { StackScreenProps } from '@react-navigation/stack';
+import { PublicRootStackParamList } from '../../routes/public.routes';
 import BrandSvg from '../../assets/brand.svg';
 import LogoSvg from '../../assets/logo.svg';
 import Animated, { 
@@ -9,14 +11,12 @@ import Animated, {
   Extrapolate,
   runOnJS
 } from 'react-native-reanimated';
-import { StackScreenProps } from '@react-navigation/stack';
-import { RootStackParamList } from '../../routes/stack.routes';
 import {
   Container,
 } from './styles';
 import { StatusBar } from 'react-native';
 
-type Props = StackScreenProps<RootStackParamList, 'Splash'>
+type Props = StackScreenProps<PublicRootStackParamList, 'Splash'>
 
 export function Splash({ route, navigation }: Props) {
   const splashAnimation = useSharedValue(0);
@@ -52,7 +52,7 @@ export function Splash({ route, navigation }: Props) {
   });
 
   function startApp() {
-    navigation.navigate('Home');
+    navigation.navigate('SignIn');
   }
 
   useEffect(() => {

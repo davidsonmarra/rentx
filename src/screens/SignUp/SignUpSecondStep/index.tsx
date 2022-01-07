@@ -6,7 +6,7 @@ import { BackButton } from '../../../components/BackButton';
 import { Bullet } from '../../../components/Bullet';
 import { Button } from '../../../components/Button';
 import { PasswordInput } from '../../../components/PasswordInput';
-import { RootStackParamList } from '../../../routes/stack.routes';
+import { PublicRootStackParamList } from '../../../routes/public.routes';
 import {
   Container,
   Header,
@@ -18,7 +18,7 @@ import {
 } from './styles';
 import api from '../../../services/api';
 
-type Props = StackScreenProps<RootStackParamList, 'SignUpSecondStep'>;
+type Props = StackScreenProps<PublicRootStackParamList, 'SignUpSecondStep'>;
 
 export function SignUpSecondStep({ navigation, route }: Props) {
   const { user } = route.params;

@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { StackScreenProps } from '@react-navigation/stack';
+import { PublicRootStackParamList } from '../../routes/public.routes';
 import { useTheme } from 'styled-components';
 import { useAuth } from '../../hooks/auth';
 import { 
@@ -20,10 +22,8 @@ import {
   Form,
   Footer
 } from './styles';
-import { StackScreenProps } from '@react-navigation/stack';
-import { RootStackParamList } from '../../routes/stack.routes';
 
-type Props = StackScreenProps<RootStackParamList, 'Splash'>;
+type Props = StackScreenProps<PublicRootStackParamList, 'SignIn'>;
 
 export function SignIn({ navigation }: Props) {
   const [email, setEmail] = useState('');

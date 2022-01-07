@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
-import { RootStackParamList } from '../../routes/stack.routes';
+import { AuthRootStackParamList } from '../../routes/auth.stack.routes';
 import { useTheme } from 'styled-components';
 import { Acessory } from '../../components/Acessory';
 import { BackButton } from '../../components/BackButton';
@@ -38,7 +38,7 @@ import {
 import api from '../../services/api';
 import { Alert } from 'react-native';
 
-type Props = StackScreenProps<RootStackParamList, 'SchedulingDetails'>;
+type Props = StackScreenProps<AuthRootStackParamList, 'SchedulingDetails'>;
 
 export function SchedulingDetails({ route, navigation }: Props) {
   const [loading, setLoading] = useState(false);
@@ -48,6 +48,7 @@ export function SchedulingDetails({ route, navigation }: Props) {
   async function handleConfirmRental() {
     setLoading(true);
     const schedulesByCar = await api.get(`/schedules_bycars/${car.id}`);
+    console.log('teste')
     const unavailable_dates = [
       ...schedulesByCar.data.unavailable_dates, 
       ...dates
@@ -92,8 +93,8 @@ export function SchedulingDetails({ route, navigation }: Props) {
             <Name>{car.name}</Name>
           </Description>
           <Rent>
-            <Period>{car.rent.period}</Period>
-            <Price>{`R$ ${car.rent.price.toLocaleString()}`}</Price>
+            <Period>{car.period}</Period>
+            <Price>{`R$ ${car.price.toLocaleString()}`}</Price>
           </Rent>
         </Details>
         <Accessories>
@@ -140,10 +141,10 @@ export function SchedulingDetails({ route, navigation }: Props) {
         <RentalPrice>
           <RentalPriceLabel>TOTAL</RentalPriceLabel>
           <RentalPriceDetails>
-            <RentalPriceQuota>R$ {car.rent.price} x{dates.length} diárias</RentalPriceQuota>
+            <RentalPriceQuota>R$ {car.price} x{dates.length} diárias</RentalPriceQuota>
             <RentalPriceTotal>
               {
-                `R$ ${(car.rent.price*dates.length).toLocaleString()}`
+                `R$ ${(car.price*dates.length).toLocaleString()}`
               }</RentalPriceTotal>
           </RentalPriceDetails>
         </RentalPrice>
