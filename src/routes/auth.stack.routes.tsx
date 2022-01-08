@@ -1,11 +1,17 @@
-import React from 'react';
+import React, { useLayoutEffect } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
+import { Splash } from '../screens/Splash';
 import { Home } from '../screens/Home';
 import { CarDetails } from '../screens/CarDetails';
 import { Scheduling } from '../screens/Scheduling';
 import { Confirmation } from '../screens/Confirmation';
 import { SchedulingDetails } from '../screens/SchedulingDetails';
 import { CarDTO } from '../dtos/CarDTO';
+import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import { AuthRootTabParamList } from './auth.tab.routes';
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
+import { Platform } from 'react-native';
+import { useTheme } from 'styled-components';
 
 export interface UserDataProps {
   name: string;
@@ -20,6 +26,7 @@ interface ConfirmationProps {
 }
 
 export type AuthRootStackParamList = {
+  Splash: undefined;
   Home: undefined;
   CarDetails: { car: CarDTO };
   Scheduling: { car: CarDTO };
@@ -29,14 +36,33 @@ export type AuthRootStackParamList = {
 
 const { Navigator, Screen } = createStackNavigator<AuthRootStackParamList>();
 
-export function AuthRoutesStack() {
+type Props = BottomTabScreenProps<AuthRootTabParamList, 'AuthRoutesStack'>;
+
+export function AuthRoutesStack({ navigation, route }: Props) {
+  const theme = useTheme();
+
+  useLayoutEffect(() => {
+    const routeName = getFocusedRouteNameFromRoute(route);
+    if(routeName === 'Splash' || !routeName) 
+      navigation.setOptions({ tabBarStyle: { display: 'none' }});
+    else 
+      navigation.setOptions({ tabBarStyle: {
+        padding: Platform.OS === 'ios' ? 20 : 0,
+        height: 78,
+        backgroundColor: theme.colors.background_primary
+      }});
+  }, [navigation, route])
   return (
     <Navigator
       screenOptions={{
         headerShown: false,
       }}
-      initialRouteName='Home'
+      initialRouteName='Splash'
     >
+      <Screen 
+        name="Splash"
+        component={Splash}
+      />
       <Screen 
         name="Home"
         component={Home}

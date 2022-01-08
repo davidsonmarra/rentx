@@ -28,17 +28,21 @@ export function Home({ route, navigation }: Props) {
   }
 
   useEffect(() => {
+    let isMounted = true;
     async function fetchCars() {
       try {
         const response = await api.get('/cars');
-        setCars(response.data);
+        isMounted && setCars(response.data);
       } catch(error) {
         console.log(error);
       } finally {
-        setLoading(false);
+        isMounted && setLoading(false);
       }
     }
     fetchCars();
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   return (

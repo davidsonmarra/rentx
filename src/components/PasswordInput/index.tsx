@@ -52,6 +52,7 @@ export function PasswordInput({
         onBlur={handleInputBlur}
         secureTextEntry={isPasswordVisible}
         isFocused={isFocused}
+        autoCorrect={false}
       />
       <ChangePasswordVisibilityButton onPress={handlePasswordVisibilityChange}>
         <IconContainer isFocused={isFocused}>
