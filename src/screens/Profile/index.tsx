@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../hooks/auth';
-import { KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
 import { BottomTabScreenProps, useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { AuthRootTabParamList } from '../../routes/auth.tab.routes';
 import { useTheme } from 'styled-components';
 import { Feather } from '@expo/vector-icons';
 import { BackButton } from '../../components/BackButton';
 import { Input } from '../../components/Input';
+import * as Yup from 'yup';
 import {
   Container,
   Header,
@@ -23,24 +25,82 @@ import {
   Section
 } from './styles';
 import { PasswordInput } from '../../components/PasswordInput';
+import { Button } from '../../components/Button';
 
 type Props = BottomTabScreenProps<AuthRootTabParamList, 'AuthRoutesStack'>;
 
 export function Profile({ navigation }: Props) {
+  const { user, signOut, updateUser } = useAuth();
   const [options, setOptions] = useState<'dataEdit' | 'passwordEdit'>('dataEdit');
+  const [avatar, setAvatar] = useState(user.avatar);
+  const [name, setName] = useState(user.name);
+  const [driverLicense, setDriverLicense] = useState(user.driver_license);
   const theme = useTheme();
-  const { user } = useAuth();
 
   function handleBack() {
     navigation.goBack();
   }
 
   function handleSignOut() {
-
+    Alert.alert(
+      'Tem certeza?', 
+      'Lembre-se, que se você sair, irá precisar de internet para conectar-se novamente.',
+      [
+        {
+          text: 'Cancelar',
+          onPress: () => {},
+        }, 
+        {
+          text: 'Sair',
+          onPress: () => signOut(),
+        }
+      ]
+    )
   }
 
   function handleOptionChange(optionSelected: 'dataEdit' | 'passwordEdit') {
     setOptions(optionSelected);
+  }
+
+  async function handleAvatarSelect() {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 4],
+      quality: 1
+    });
+    if(result.cancelled) 
+      return;
+    if(result.uri) 
+      setAvatar(result.uri);
+  }
+
+  async function handleProfileUpdate() {
+    try {
+      const schema = Yup.object().shape({
+        driverLicense: Yup.string()
+        .required('CNH é Obrigatória'),
+        name: Yup.string()
+        .required('Nome é obrigatório')
+      });
+      const data = { name, driverLicense };
+      await schema.validate(data);
+      await updateUser({
+        id: user.id,
+        user_id: user.user_id,
+        email: user.email,
+        name,
+        driver_license: driverLicense,
+        avatar,
+        token: user.token
+      });
+      Alert.alert('Perfil atualizado!');
+    } catch (error) {
+      if(error instanceof Yup.ValidationError)
+        Alert.alert('Opa', error.message);
+      else 
+        Alert.alert('Não foi possível atualizar o perfil');
+    }
   }
 
   return (
@@ -60,8 +120,8 @@ export function Profile({ navigation }: Props) {
               </LogoutButton>
             </HeaderTop>
             <PhotoContainer>
-              <Photo source={{ uri: 'https://github.com/davidsonmarra.png'}} />
-              <PhotoButton onPress={() => {}}>
+              { !!avatar && <Photo source={{ uri: avatar}} /> }
+              <PhotoButton onPress={handleAvatarSelect}>
                 <Feather 
                   name='camera'
                   size={24}
@@ -94,6 +154,7 @@ export function Profile({ navigation }: Props) {
                     autoCapitalize='words'
                     autoCorrect={false}
                     defaultValue={user.name}
+                    onChangeText={setName}
                   />
                   <Input 
                     iconName='mail'
@@ -105,6 +166,7 @@ export function Profile({ navigation }: Props) {
                     placeholder='CNH'
                     keyboardType='numeric'
                     defaultValue={user.driver_license}
+                    onChangeText={setDriverLicense}
                   />
                 </Section>
               ) : (
@@ -124,6 +186,10 @@ export function Profile({ navigation }: Props) {
                 </Section>
               )
             }
+            <Button 
+              title='Salvar Alterações'
+              onPress={handleProfileUpdate}
+            />
           </Content>
         </Container>
       </TouchableWithoutFeedback>
