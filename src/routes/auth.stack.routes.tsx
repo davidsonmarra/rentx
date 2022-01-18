@@ -30,9 +30,9 @@ export type AuthRootStackParamList = {
   Splash: undefined;
   Home: undefined;
   CarDetails: { car: ModelCar };
-  Scheduling: { car: CarDTO };
+  Scheduling: { car: ModelCar };
   Confirmation: ConfirmationProps;
-  SchedulingDetails: { car: CarDTO, dates: string[] };
+  SchedulingDetails: { car: ModelCar, dates: string[] };
 };
 
 const { Navigator, Screen } = createStackNavigator<AuthRootStackParamList>();

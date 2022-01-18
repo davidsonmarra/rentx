@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
 import { AuthRootStackParamList } from '../../routes/auth.stack.routes';
 import { useTheme } from 'styled-components';
@@ -37,44 +37,52 @@ import {
 } from './styles';
 import api from '../../services/api';
 import { Alert } from 'react-native';
+import { CarDTO } from '../../dtos/CarDTO';
+import { useNetInfo } from '@react-native-community/netinfo';
 
 type Props = StackScreenProps<AuthRootStackParamList, 'SchedulingDetails'>;
 
 export function SchedulingDetails({ route, navigation }: Props) {
+  const [carUpdated, setCarUpdated] = useState<CarDTO>({} as CarDTO);
   const [loading, setLoading] = useState(false);
   const theme = useTheme();
   const { car, dates } = route.params;
+  const netInfo = useNetInfo();
   
   async function handleConfirmRental() {
     setLoading(true);
-    const schedulesByCar = await api.get(`/schedules_bycars/${car.id}`);
-    console.log('teste')
-    const unavailable_dates = [
-      ...schedulesByCar.data.unavailable_dates, 
-      ...dates
-    ];
-    await api.post(`/schedules_byuser`, {
+    
+    await api.post(`/rentals`, {
       user_id: 1,
-      car,
-      startDate: format(parseISO(dates[0]), 'dd/MM/yyyy'),
-      endDate: format(parseISO(dates[dates.length - 1]), 'dd/MM/yyyy')
-    })
-    await api.put(`/schedules_bycars/${car.id}`, {
-      id: car.id,
-      unavailable_dates
+      car_id: car.id,
+      start_date: new Date(dates[0]),
+      end_date: new Date(dates[dates.length - 1]),
+      total: Number(dates.length * car.price)
     })
     .then(() => navigation.navigate('Confirmation', {
       title: 'Carro alugado!',
       message: 'Agora você só precisa ir\naté a concessionária da RENTX\npegar seu automóvel.',
       nextScreenRoute: 'Home'
     }))
-    .catch((error) => Alert.alert('Não foi possível confirmar o agendamento.'))
+    .catch((error) => {
+      console.log(error)
+      Alert.alert('Não foi possível confirmar o agendamento.');
+    })
     .finally(() => setLoading(false));
   }
 
   function handleBack() {
     navigation.goBack();
-  } 
+  }
+
+  useEffect(() => {
+    async function fetchCarUpdated() {
+      const response = await api.get(`/cars/${car.id}`);
+      setCarUpdated(response.data);
+    }
+    if(netInfo.isConnected === true) 
+      fetchCarUpdated();
+  }, [netInfo.isConnected]);
 
   return (
     <Container>
@@ -83,7 +91,10 @@ export function SchedulingDetails({ route, navigation }: Props) {
       </Header>
       <CarImages>
         <ImageSlider 
-          imagesUrl={car.photos}
+          imagesUrl={
+            !!carUpdated.photos ?
+            carUpdated.photos : [{ id: car.thumbnail, photo: car.thumbnail }]
+          }
         />
       </CarImages>
       <Content>
@@ -99,14 +110,19 @@ export function SchedulingDetails({ route, navigation }: Props) {
         </Details>
         <Accessories>
         {
-            car.accessories.map(accessory => 
-              <Acessory 
-                key={accessory.type}
-                name={accessory.name} 
-                icon={getAccessoryIcon(accessory.type)}
-              />
-            )
-          }
+          carUpdated.accessories &&
+          <Accessories>
+            {
+              carUpdated.accessories.map(accessory => 
+                <Acessory 
+                  key={accessory.type}
+                  name={accessory.name} 
+                  icon={getAccessoryIcon(accessory.type)}
+                />
+              )
+            }
+          </Accessories>
+        }
         </Accessories>
         <RentalPeriod>
           <CalendarIcon>
