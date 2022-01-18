@@ -5,6 +5,7 @@ import {
   Container,
   Name
 } from './styles';
+import { useTheme } from 'styled-components';
 
 interface Props {
   name: string;
@@ -15,9 +16,14 @@ export function Acessory({
   name, 
   icon: Icon
 }: Props) {
+  const theme = useTheme();
   return (
     <Container>
-      <Icon width={RFValue(32)} height={RFValue(32)} />
+      <Icon 
+        width={RFValue(32)}
+        height={RFValue(32)}
+        fill={theme.colors.title}
+      />
       <Name>{name}</Name>
     </Container>
   );

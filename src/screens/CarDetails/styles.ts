@@ -75,6 +75,13 @@ export const Accessories = styled.View`
   margin-top: 16px;
 `;
 
+export const OfflineInfo = styled.Text`
+  font-family: ${({ theme }) => theme.fonts.primary_400};
+  font-size: ${RFValue(12)}px;
+  color: ${({ theme }) => theme.colors.main};
+  text-align: center;
+`;
+
 export const About = styled.Text`
   font-family: ${({ theme }) => theme.fonts.primary_400};
   font-size: ${RFValue(15)}px;

@@ -26,6 +26,7 @@ import {
 } from './styles';
 import { PasswordInput } from '../../components/PasswordInput';
 import { Button } from '../../components/Button';
+import { useNetInfo } from '@react-native-community/netinfo';
 
 type Props = BottomTabScreenProps<AuthRootTabParamList, 'AuthRoutesStack'>;
 
@@ -36,6 +37,7 @@ export function Profile({ navigation }: Props) {
   const [name, setName] = useState(user.name);
   const [driverLicense, setDriverLicense] = useState(user.driver_license);
   const theme = useTheme();
+  const netInfo = useNetInfo();
 
   function handleBack() {
     navigation.goBack();
@@ -59,7 +61,10 @@ export function Profile({ navigation }: Props) {
   }
 
   function handleOptionChange(optionSelected: 'dataEdit' | 'passwordEdit') {
-    setOptions(optionSelected);
+    if(!netInfo.isConnected === true && optionSelected === 'passwordEdit')
+      Alert.alert('Você está offline', 'Para mudar a senha, conecte-se a Internet');
+    else
+      setOptions(optionSelected);
   }
 
   async function handleAvatarSelect() {

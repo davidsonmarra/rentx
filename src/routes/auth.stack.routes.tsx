@@ -7,6 +7,7 @@ import { Scheduling } from '../screens/Scheduling';
 import { Confirmation } from '../screens/Confirmation';
 import { SchedulingDetails } from '../screens/SchedulingDetails';
 import { CarDTO } from '../dtos/CarDTO';
+import { Car as ModelCar } from '../database/model/Car';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { AuthRootTabParamList } from './auth.tab.routes';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
@@ -28,7 +29,7 @@ interface ConfirmationProps {
 export type AuthRootStackParamList = {
   Splash: undefined;
   Home: undefined;
-  CarDetails: { car: CarDTO };
+  CarDetails: { car: ModelCar };
   Scheduling: { car: CarDTO };
   Confirmation: ConfirmationProps;
   SchedulingDetails: { car: CarDTO, dates: string[] };
